@@ -15,7 +15,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/")
 
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_TEMP_OUTPUT_DIR})
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -std=c11 -Wall -Werror")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O0 -std=c11 -Wall -Werror")
 
 cmake_minimum_required(
     VERSION 3.5
@@ -165,12 +165,31 @@ add_executable(
     ${SOURCE_FILES}
 )
 
+add_executable(
+        testgridstore
+        test/tester_main.c
+        ${SOURCE_FILES}
+)
+
+
 IF (PROJECT_OS_LINUX)
     # add two aditional flags to call posix functions and to use the bsd library
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_XOPEN_SOURCE=700 -D_BSD_SOURCE")
 
     target_link_libraries(
             gridstore
+            bsd
+            m
+            ${APR_LIBRARIES}
+            ${APRUTIL_LIBRARIES}
+            ${OPENSSL_LIBRARIES}
+            pthread
+    )
+    target_link_libraries(
+            testgridstore
+            subunit
+            rt
+            check_pic
             bsd
             m
             ${APR_LIBRARIES}
@@ -188,6 +207,20 @@ ELSEIF (PROJECT_OS_OSX)
             ${OPENSSL_LIBRARIES}
             pthread
     )
+
+   target_link_libraries(
+           testgridstore
+           subunit
+           rt
+           check_pic
+           ${APR_LIBRARIES}
+           ${APRUTIL_LIBRARIES}
+           /usr/local/opt/argp-standalone/lib
+           /usr/local/opt/argp-standalone/lib/libargp.a
+           ${OPENSSL_LIBRARIES}
+           pthread
+   )
+
 ENDIF (PROJECT_OS_LINUX)
 
 if(DOXYGEN_FOUND)
