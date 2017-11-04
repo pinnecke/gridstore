@@ -21,19 +21,25 @@ int main(void)
 //
 //int main(void){
 //    apr_initialize();
-//    vec_t *rat_vec = vec_new(sizeof (int),20);
-//    int *source_data = malloc(3 * sizeof(int));
-//    *source_data =4;
-//    *(source_data + 1) =2;
-//    *(source_data + 2) =3;
-//    rat_vec->num_elements = 3;
-//    rat_vec->data = source_data;
-//    comp_t my_comp = &compare_ints;
-////    printf("the result %d", my_comp(&a,&b));
-//    vec_updatesort(rat_vec,my_comp);
-//    printf("vd  =%d \n",rat_vec->is_sorted);
-//    vec_free(rat_vec);
+//    vec_t *rat_vec_src = vec_new(sizeof (int), 4);
 //
+//    int *source_data = malloc(4 * sizeof(int));
+//    *source_data = 500;
+//    *(source_data + 1) = 3;
+//    *(source_data + 2) = 4;
+//    *(source_data + 3) = 6;
+////    printf("source + 2 = %d\n",*(source_data ));
+//    vec_set(rat_vec_src, 0, 4, source_data);
+//
+//    int (*compare_ints_ptr)(const void*,const void*) = &compare_ints;
+//    int (*equal_ints_ptr)(const void*,const void*) = &equal_ints;
+//    int needle = 4;
+//    int *search_results = (int *) vec_bsearch(rat_vec_src, &needle, compare_ints_ptr, equal_ints_ptr);
+//
+//    printf("search result = %d\n",*(search_results));
+//
+//    free(source_data);
+//    vec_free(rat_vec_src);
 //    apr_terminate();
 //    return 0;
 //}
