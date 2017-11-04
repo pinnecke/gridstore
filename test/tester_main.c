@@ -3,12 +3,14 @@
 //
 #include <check.h>
 #include "test_vector.h"
-
+#include "test_list.h"
 int main(void)
 {
     apr_initialize();
     init_vec_test();
-    SRunner *sr = srunner_create(vector_tsuit);
+    init_list_test();
+    SRunner *sr = srunner_create(list_tsuit);
+    srunner_add_suite(sr,vector_tsuit);
     int nf;
 
     srunner_run_all(sr, CK_ENV);
