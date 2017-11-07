@@ -4,13 +4,24 @@
 #include <check.h>
 #include "test_vector.h"
 #include "test_list.h"
+#include "testhashset.h"
+#include "test_utils.h"
+// #include "test_freelist.h"
+//#include "test_gshash.h"
 int main(void)
 {
     apr_initialize();
     init_vec_test();
     init_list_test();
+    init_hashset_test();
+    init_utils_test();
+    //  init_freelist_test();
+ //   init_gs_hash_test();
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
+    srunner_add_suite(sr,hashset_tsuit);
+   // srunner_add_suite(sr,gs_hash_tsuit);
+    srunner_add_suite(sr,utils_tsuit);
     int nf;
 
     srunner_run_all(sr, CK_ENV);

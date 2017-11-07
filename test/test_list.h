@@ -26,6 +26,7 @@ START_TEST(test_list_new)
 }
 END_TEST
 
+
 START_TEST(test_list_push)
     {
         list_t * rat_list = list_new(sizeof (int));
@@ -41,13 +42,22 @@ START_TEST(test_list_push)
 END_TEST
 
 
-//START_TEST(test_list_new)
-//    {
-//        list_t * rat_list = list_new(sizeof (int));
-//                fail_unless(list_is_empty(rat_list) , "list creation failed");
-//        list_delete(rat_list);
-//    }
-//END_TEST
+START_TEST(test_list_remove)
+    {
+
+        list_t * rat_list = list_new(sizeof (int));
+        int data = 4;
+        list_remove(&data);
+
+        list_push(rat_list, &data);
+        int add_data = 5;
+        list_push(rat_list, &add_data);
+                fail_unless(! list_is_empty(rat_list) , "list push failed");
+                fail_unless ( *(int *) list_begin(rat_list) == data, "list push failed"  );
+                fail_unless (list_length(rat_list) == 2 , "list push failed");
+        list_delete(rat_list);
+    }
+END_TEST
 
 
 void init_list_test()
@@ -58,8 +68,11 @@ void init_list_test()
     tcase_add_test(list_test_1, test_list_new);
     list_test_2 = tcase_create("test list push");
     tcase_add_test(list_test_2, test_list_push);
+    list_test_3 = tcase_create("test list remove");
+    tcase_add_test(list_test_3, test_list_remove);
 
     suite_add_tcase(list_tsuit, list_test_1);
     suite_add_tcase(list_tsuit, list_test_2);
+    suite_add_tcase(list_tsuit, list_test_3);
 }
 
