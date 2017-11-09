@@ -171,6 +171,12 @@ add_executable(
         ${SOURCE_FILES}
 )
 
+add_executable(
+        hash_usage
+        test/marcus/hash_usage.c
+        ${SOURCE_FILES}
+)
+
 
 IF (PROJECT_OS_LINUX)
     # add two aditional flags to call posix functions and to use the bsd library
@@ -197,6 +203,18 @@ IF (PROJECT_OS_LINUX)
             ${OPENSSL_LIBRARIES}
             pthread
     )
+    target_link_libraries(
+            hash_usage
+            subunit
+            rt
+            check_pic
+            bsd
+            m
+            ${APR_LIBRARIES}
+            ${APRUTIL_LIBRARIES}
+            ${OPENSSL_LIBRARIES}
+            pthread
+    )
 ELSEIF (PROJECT_OS_OSX)
    target_link_libraries(
             gridstore
@@ -213,6 +231,16 @@ ELSEIF (PROJECT_OS_OSX)
            subunit
            rt
            check_pic
+           ${APR_LIBRARIES}
+           ${APRUTIL_LIBRARIES}
+           /usr/local/opt/argp-standalone/lib
+           /usr/local/opt/argp-standalone/lib/libargp.a
+           ${OPENSSL_LIBRARIES}
+           pthread
+   )
+
+   target_link_libraries(
+           hash_usage
            ${APR_LIBRARIES}
            ${APRUTIL_LIBRARIES}
            /usr/local/opt/argp-standalone/lib
