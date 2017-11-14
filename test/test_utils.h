@@ -1,6 +1,16 @@
+// Copyright (C) 2017 Marcus Pinnecke
 //
-// Created by Mahmoud Mohsen on 10/26/17.
+// This program is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either user_port 3 of the License, or
+// (at your option) any later user_port.
 //
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
 #pragma once
 
 #include <check.h>
@@ -8,26 +18,15 @@
 
 Suite *utils_tsuit;
 TCase *utils_test_1;
-TCase *utils_test_2;
-TCase *utils_test_3;
-TCase *utils_test_4;
-TCase *utils_test_5;
-TCase *utils_test_6;
-TCase *utils_test_7;
-TCase *utils_test_8;
-TCase *utils_test_9;
-
 
 START_TEST(test_utils_basic)
 {
     fail_unless(strtoint("5") == 5,"string to int fails");
     fail_unless(strtoint("5") != 6,"string to int fails");
     fail_unless(strtoint("100000") == 100000,"string to int fails");
-    fail_unless(strtoint("-1") == -1,"string to int fails");
 }
 
 END_TEST
-
 
 
 

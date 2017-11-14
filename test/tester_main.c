@@ -1,6 +1,16 @@
+// Copyright (C) 2017 Marcus Pinnecke
 //
-// Created by Mahmoud Mohsen on 10/26/17.
+// This program is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either user_port 3 of the License, or
+// (at your option) any later user_port.
 //
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
 #include <check.h>
 #include <schema.h>
 #include "test_vector.h"
@@ -8,8 +18,9 @@
 #include "testhashset.h"
 #include "test_utils.h"
 #include "test_schema.h"
-// #include "test_freelist.h"
+#include "test_attr.h"
 #include "test_gshash.h"
+
 int main(void)
 {
     apr_initialize();
@@ -18,6 +29,7 @@ int main(void)
     init_hashset_test();
     init_utils_test();
     init_schema_test();
+    init_attr_test();
     //  init_freelist_test();
     init_gs_hash_test();
     SRunner *sr = srunner_create(list_tsuit);
@@ -26,6 +38,8 @@ int main(void)
    // srunner_add_suite(sr,gs_hash_tsuit);
     srunner_add_suite(sr,utils_tsuit);
     srunner_add_suite(sr,schema_tsuit);
+    srunner_add_suite(sr,attr_tsuit);
+
     int nf;
 
     srunner_run_all(sr, CK_ENV);

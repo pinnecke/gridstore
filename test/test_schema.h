@@ -1,6 +1,16 @@
+// Copyright (C) 2017 Marcus Pinnecke
 //
-// Created by Mahmoud Mohsen on 10/26/17.
+// This program is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either user_port 3 of the License, or
+// (at your option) any later user_port.
 //
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
 #pragma once
 
 #include <check.h>
@@ -18,8 +28,6 @@ TCase *schema_test_5;
 TCase *schema_test_6;
 TCase *schema_test_7;
 TCase *schema_test_8;
-TCase *schema_test_9;
-
 
 START_TEST(test_schema_new)
 {
@@ -58,7 +66,6 @@ START_TEST(test_schema_attributes)
         const attr_id_t * attributes_id = schema_attributes(rat_schema);
         fail_unless ( *(int *) attributes_id + 1 == 1 ,"schema attributes has failed");
         fail_unless ( *(int *) attributes_id  == 0 ,"schema attributes has failed");
-
         schema_delete(rat_schema);
     }
 END_TEST
@@ -68,7 +75,7 @@ END_TEST
 START_TEST(test_schema_subset)
     {
         schema_t *rat_schema = schema_new("test_table");
-                fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
+        fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
         enum field_type ftype = FT_UINT32;
         attr_create("age", ftype, sizeof(int32_t), rat_schema);
         attr_create("salary", ftype, sizeof(int32_t), rat_schema);
@@ -81,10 +88,12 @@ START_TEST(test_schema_subset)
         *(projected_attributes_id + 2) = *attributes_id + 3;
         schema_t *rat_subschema = schema_subset(rat_schema, projected_attributes_id, 3);
         fail_unless ( schema_num_attributes(rat_subschema) == 3 ,"subschema has failed");
-        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 0)->name, "age" ) == 0 ,"subschema has failed");
-        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 1)->name, "length" ) == 0 ,"subschema has failed");
-        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 2)->name, "Id" ) == 0 ,"subschema has failed");
-
+        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 0)->name, "age" ) == 0
+        ,"subschema has failed");
+        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 1)->name, "length" ) == 0
+        ,"subschema has failed");
+        fail_unless ( strcmp(schema_attr_by_id(rat_subschema, 2)->name, "Id" ) == 0
+        ,"subschema has failed");
 
         free((attr_id_t*)projected_attributes_id);
         schema_delete(rat_schema);
@@ -104,12 +113,15 @@ START_TEST(test_schema_attr_by_name)
         const attr_id_t* attributes_id = schema_attributes(rat_schema);
         attr_id_t* projected_attributes_id = malloc( sizeof(attributes_id) * 3 );
         *projected_attributes_id = schema_attr_by_name(rat_schema,"age") ->id;
-        fail_unless ( *(attr_id_t*) projected_attributes_id == 0 ,"getting attributes by name failed");
+        fail_unless ( *(attr_id_t*) projected_attributes_id == 0
+        ,"getting attributes by name failed");
         *(projected_attributes_id + 1) = schema_attr_by_name(rat_schema,"length") ->id;
         *(projected_attributes_id + 2) = schema_attr_by_name(rat_schema,"Id") ->id;
 
-        fail_unless ( *(attr_id_t*) (projected_attributes_id + 1) == 2 ,"getting attributes by name failed");
-        fail_unless ( *(attr_id_t*) (projected_attributes_id + 2) == 3 ,"getting attributes by name failed");
+        fail_unless ( *(attr_id_t*) (projected_attributes_id + 1) == 2
+        ,"getting attributes by name failed");
+        fail_unless ( *(attr_id_t*) (projected_attributes_id + 2) == 3
+        ,"getting attributes by name failed");
 
         free((attr_id_t*)projected_attributes_id);
         schema_delete(rat_schema);
@@ -120,7 +132,7 @@ END_TEST
 START_TEST(test_schema_attr_by_id)
     {
         schema_t *rat_schema = schema_new("test_table");
-                fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
+        fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
         enum field_type ftype = FT_UINT32;
         attr_create("age", ftype, sizeof(int32_t), rat_schema);
         attr_create("salary", ftype, sizeof(int32_t), rat_schema);
@@ -135,13 +147,17 @@ START_TEST(test_schema_attr_by_id)
         fail_unless ( *(attr_id_t*) projected_attributes_id == 0 ,"getting attributes by name failed");
 
         *(projected_attributes_id + 1) = schema_attr_by_id(rat_schema,
-                                                          schema_attr_by_name(rat_schema,"length") ->id)->id;
+                                                          schema_attr_by_name(rat_schema,"length")
+                                                                  ->id)->id;
 
         *(projected_attributes_id + 2) = schema_attr_by_id(rat_schema,
-                                                          schema_attr_by_name(rat_schema,"Id") ->id)->id;
+                                                          schema_attr_by_name(rat_schema,"Id")
+                                                                  ->id)->id;
 
-        fail_unless ( *(attr_id_t*) (projected_attributes_id + 1) == 2 ,"getting attributes by name failed");
-        fail_unless ( *(attr_id_t*) (projected_attributes_id + 2) == 3 ,"getting attributes by name failed");
+        fail_unless ( *(attr_id_t*) (projected_attributes_id + 1) == 2 ,
+                      "getting attributes by name failed");
+        fail_unless ( *(attr_id_t*) (projected_attributes_id + 2) == 3 ,
+                      "getting attributes by name failed");
 
         free((attr_id_t*)projected_attributes_id);
 
@@ -153,7 +169,7 @@ END_TEST
 START_TEST(test_schema_attr_by_size_by_id)
     {
         schema_t *rat_schema = schema_new("test_table");
-                fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
+        fail_unless (! schema_num_attributes(rat_schema) ,"wrong number of schema attributes");
         enum field_type ftype = FT_UINT32;
         attr_create("age", ftype, sizeof(int32_t), rat_schema);
         attr_create("salary", ftype, sizeof(int32_t), rat_schema);
@@ -162,13 +178,10 @@ START_TEST(test_schema_attr_by_size_by_id)
         const attr_id_t* attributes_id = schema_attributes(rat_schema);
         attr_id_t* projected_attributes_id = malloc( sizeof(attributes_id) * 3 );
         *projected_attributes_id = schema_attr_by_id(rat_schema,
-                                                     schema_attr_by_name(rat_schema,"age") ->id)->id;
-
-
+                                                     schema_attr_by_name(rat_schema,"age")
+                                                             ->id)->id;
         fail_unless (schema_attr_type(rat_schema, *projected_attributes_id) == FT_UINT32 ,"getting attributes by name failed");
-
-      free((attr_id_t*)projected_attributes_id);
-
+        free((attr_id_t*)projected_attributes_id);
         schema_delete(rat_schema);
     }
 END_TEST
@@ -200,29 +213,6 @@ START_TEST(test_schema_print)
     }
 END_TEST
 
-//
-//START_TEST(test_schema_push)
-//    {
-//        schema_t * rat_schema = schema_new(sizeof (int));
-//        int data = 4;
-//        schema_push(rat_schema, &data);
-//        int add_data = 5;
-//        schema_push(rat_schema, &add_data);
-//        fail_unless(! schema_is_empty(rat_schema) , "schema push failed");
-//        fail_unless ( *(int *) schema_begin(rat_schema) == data, "schema push failed"  );
-//        fail_unless (schema_length(rat_schema) == 2 , "schema push failed");
-//        schema_delete(rat_schema);
-//    }
-//END_TEST
-//
-//
-//START_TEST(test_schema_remove)
-//    {
-//
-//        schema_t * rat_schema = schema_new(sizeof (int));
-//    }
-//END_TEST
-
 
 void init_schema_test()
 {
@@ -245,7 +235,6 @@ void init_schema_test()
     schema_test_8 = tcase_create("test schema print to file");
     tcase_add_test(schema_test_8, test_schema_print);
 
-
     suite_add_tcase(schema_tsuit, schema_test_1);
     suite_add_tcase(schema_tsuit, schema_test_2);
     suite_add_tcase(schema_tsuit, schema_test_3);
@@ -254,6 +243,5 @@ void init_schema_test()
     suite_add_tcase(schema_tsuit, schema_test_6);
     suite_add_tcase(schema_tsuit, schema_test_7);
     suite_add_tcase(schema_tsuit, schema_test_8);
-
 }
 

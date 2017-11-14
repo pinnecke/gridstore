@@ -1,6 +1,16 @@
+// Copyright (C) 2017 Marcus Pinnecke
 //
-// Created by Mahmoud Mohsen on 10/26/17.
+// This program is free software: you can redistribute it and/or modify it under the terms of the
+// GNU General Public License as published by the Free Software Foundation, either user_port 3 of the License, or
+// (at your option) any later user_port.
 //
+// This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+// See the GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License along with this program.
+// If not, see <http://www.gnu.org/licenses/>.
+
 #pragma once
 
 #include <check.h>
@@ -21,7 +31,6 @@ TCase *vector_test_11;
 TCase *vector_test_12;
 TCase *vector_test_13;
 TCase *vector_test_14;
-TCase *vector_test_15;
 TCase *vector_test_16;
 TCase *vector_test_17;
 TCase *vector_test_18;
@@ -30,8 +39,7 @@ TCase *vector_test_20;
 TCase *vector_test_21;
 TCase *vector_test_22;
 TCase *vector_test_23;
-
-TCase *vector_test_50;
+TCase *vector_test_24;
 
 int compare_ints (const void *lhs ,const void *rhs);
 int equal_ints (const void *lhs ,const void *rhs);
@@ -228,15 +236,14 @@ START_TEST(test_vec_end)
     {
         vec_t * rat_vec = vec_new(sizeof (int),3);
         int *source_data = malloc(3 * sizeof(int));
-        *source_data =1;
-        *(source_data + 1) =2;
-        *(source_data + 2) =3;
+        *source_data = 1;
+        *(source_data + 1) = 2;
+        *(source_data + 2) = 3;
         rat_vec->num_elements = 3;
 
         rat_vec->data =source_data;
-                fail_unless(  (*(int *)vec_end(rat_vec) == 3), "vector end has failed");
+        fail_unless(  (*(int *)(vec_end(rat_vec) - sizeof(int)) == 3), "vector end has failed");
         vec_free(rat_vec);
-
     }
 END_TEST
 
@@ -244,9 +251,9 @@ START_TEST(test_vec_pop_unsafe)
     {
         vec_t * rat_vec = vec_new(sizeof (int),3);
         int *source_data = malloc(3 * sizeof(int));
-        *source_data =1;
-        *(source_data + 1) =2;
-        *(source_data + 2) =3;
+        *source_data = 1;
+        *(source_data + 1) = 2;
+        *(source_data + 2) = 3;
         rat_vec->num_elements = 3;
         rat_vec->data =source_data;
 
@@ -262,11 +269,11 @@ START_TEST(test_vec_set)
         vec_t * rat_vec = vec_new(sizeof (int),3);
         int *source_data = malloc(3 * sizeof(int));
         *source_data =1;
-        *(source_data + 1) =2;
-        *(source_data + 2) =3;
-        vec_set(rat_vec,0,3,source_data);
+        *(source_data + 1) = 2;
+        *(source_data + 2) = 3;
+        vec_set(rat_vec, 0 , 3, source_data);
         int *p = rat_vec->data;
-                fail_unless( (*p ==1) && (*(p+1) == 2) && (*(p+2) == 3) , "vector data gave a wrong value after vector set");
+        fail_unless( (*p ==1) && (*(p+1) == 2) && (*(p+2) == 3) , "vector data gave a wrong value after vector set");
         free(source_data);
         vec_free(rat_vec);
     }
@@ -278,19 +285,17 @@ START_TEST(test_vec_pushback)
         vec_t * rat_vec = vec_new(sizeof (int),3);
         int *source_data = malloc(3 * sizeof(int));
         *source_data =1;
-        *(source_data + 1) =2;
-        *(source_data + 2) =3;
-
+        *(source_data + 1) = 2;
+        *(source_data + 2) = 3;
         int *more_data = malloc(3 * sizeof(int));
         *more_data = 5;
         *(more_data + 1) = 6;
         *(more_data + 2) = 7;
-
-        vec_set(rat_vec,0,3,source_data);
-        vec_pushback(rat_vec,3,more_data);
-
+        vec_set(rat_vec, 0, 3, source_data);
+        vec_pushback(rat_vec, 3, more_data);
         int *p = rat_vec->data;
-                fail_unless( (*(p+3) ==5) && (*(p+4) == 6) && (*(p+5) == 7) , "vector data gave a wrong value after vector set");
+        fail_unless( (*(p+3) == 5) && (*(p+4) == 6) && (*(p+5) == 7) ,
+                     "vector data gave a wrong value after vector set");
         free(source_data);
         free(more_data);
         vec_free(rat_vec);
@@ -300,22 +305,18 @@ END_TEST
 
 START_TEST(test_vec_add_all)
     {
-        vec_t *rat_vec_src = vec_new(sizeof (int),2);
-        vec_t *rat_vec_dist = vec_new(sizeof (int),2);
+        vec_t *rat_vec_src = vec_new(sizeof (int), 2);
+        vec_t *rat_vec_dist = vec_new(sizeof (int), 2);
 
         int *source_data = malloc(2 * sizeof(int));
-        *source_data =1;
-        *(source_data + 1) =2;
-
-
+        *source_data = 1;
+        *(source_data + 1) = 2;
         int *dist_data = malloc(2 * sizeof(int));
         *(dist_data ) = 5;
         *(dist_data + 1) = 6;
-
         vec_set(rat_vec_src, 0, 2 ,source_data);
         vec_set(rat_vec_dist, 0, 2 ,dist_data);
         vec_add_all(rat_vec_dist, rat_vec_src);
-
         int *copied_ptr = rat_vec_dist->data;
                 fail_unless(  (*copied_ptr) == 5 &&
                              (6 == *(copied_ptr + 1)) &&
@@ -331,31 +332,6 @@ START_TEST(test_vec_add_all)
 END_TEST
 
 
-START_TEST(test_vec_comp)
-    {
-        vec_t *rat_vec_src = vec_new(sizeof (int),2);
-        vec_t *rat_vec_dist = vec_new(sizeof (int),2);
-
-        int *source_data = malloc(2 * sizeof(int));
-        *source_data = 1;
-        *(source_data + 1) = 2;
-
-
-        int *dist_data = malloc(2 * sizeof(int));
-        *(dist_data ) = 5;
-        *(dist_data + 1) = 6;
-
-        vec_set(rat_vec_src, 0, 2 ,source_data);
-        vec_set(rat_vec_dist, 0, 2 ,dist_data);
-        comp_t my_comp = &compare_ints;
-        fail_unless(vec_comp(rat_vec_dist,rat_vec_src,my_comp), "vector compare has failed");
-
-        free(source_data);
-        free(dist_data);
-
-        vec_free(rat_vec_src);
-    }
-END_TEST
 
 START_TEST(test_vec_swap)
     {
@@ -437,7 +413,8 @@ START_TEST(test_vec_foreach)
     {
         vec_t *rat_vec_src = vec_new(sizeof (int), 2);
 
-        bool (*foreach_pred_ptr)(void *capture, void *begin, void *end) = &for_each_check_bigger_capture;
+        bool (*foreach_pred_ptr)(void *capture, void *begin, void *end) =
+        &for_each_check_bigger_capture;
 
         int *source_data = malloc(2 * sizeof(int));
         *source_data = 1;
@@ -459,16 +436,13 @@ END_TEST
 START_TEST(test_vec_sort)
     {
         vec_t *rat_vec_src = vec_new(sizeof (int), 2);
-
-
         int *source_data = malloc(2 * sizeof(int));
         *source_data = 500;
         *(source_data + 1) = 2;
 
         vec_set(rat_vec_src, 0, 2, source_data);
         int (*compare_ints_ptr)(const void*,const void*) = &compare_ints;
-        vec_sort(rat_vec_src,compare_ints_ptr);
-
+        vec_sort(rat_vec_src, compare_ints_ptr);
         bool success_condition = *(int *)rat_vec_src->data == 2 ;
         fail_unless(success_condition, "vector sort has failed");
 
@@ -488,11 +462,10 @@ START_TEST(test_vec_bisearch)
         *(source_data + 2) = 4;
         *(source_data + 3) = 6;
         vec_set(rat_vec_src, 0, 4, source_data);
-        int (*compare_ints_ptr)(const void*,const void*) = &compare_ints;
-        int (*equal_ints_ptr)(const void*,const void*) = &equal_ints;
         int needle = 4;
 
-        int *search_results = (int *) vec_bsearch(rat_vec_src, &needle, compare_ints_ptr, equal_ints_ptr);
+        int *search_results = (int *) vec_bsearch(rat_vec_src, &needle,
+                                                  compare_ints, compare_ints);
 
         printf("\n search result = %d \n", * search_results);
         bool success_condition = *search_results == 4 ;
@@ -568,8 +541,6 @@ void init_vec_test()
     tcase_add_test(vector_test_13, test_vec_pushback);
     vector_test_14 = tcase_create("test vector add all");
     tcase_add_test(vector_test_14, test_vec_add_all);
-    vector_test_15 = tcase_create("test vector compare");
-    tcase_add_test(vector_test_15, test_vec_comp);
     vector_test_16 = tcase_create("test vector swap");
     tcase_add_test(vector_test_16, test_vec_swap);
     vector_test_17 = tcase_create("test vector count");
@@ -586,10 +557,8 @@ void init_vec_test()
     tcase_add_test(vector_test_22, test_vec_bisearch);
     vector_test_23 = tcase_create("test vector update sort");
     tcase_add_test(vector_test_23, test_vec_updatesort);
-
-
-    vector_test_50 = tcase_create("test vector memset");
-    tcase_add_test(vector_test_50, test_vec_memset);
+    vector_test_24 = tcase_create("test vector memset");
+    tcase_add_test(vector_test_24, test_vec_memset);
 
     suite_add_tcase(vector_tsuit, vector_test_1);
     suite_add_tcase(vector_tsuit, vector_test_2);
@@ -605,15 +574,13 @@ void init_vec_test()
     suite_add_tcase(vector_tsuit, vector_test_12);
     suite_add_tcase(vector_tsuit, vector_test_13);
     suite_add_tcase(vector_tsuit, vector_test_14);
-    suite_add_tcase(vector_tsuit, vector_test_15);
     suite_add_tcase(vector_tsuit, vector_test_16);
     suite_add_tcase(vector_tsuit, vector_test_17);
     suite_add_tcase(vector_tsuit, vector_test_18);
-//    suite_add_tcase(vector_tsuit, vector_test_19);
     suite_add_tcase(vector_tsuit, vector_test_20);
     suite_add_tcase(vector_tsuit, vector_test_21);
     suite_add_tcase(vector_tsuit, vector_test_22);
     suite_add_tcase(vector_tsuit, vector_test_23);
-    suite_add_tcase(vector_tsuit, vector_test_50);
+    suite_add_tcase(vector_tsuit, vector_test_24);
 }
 
