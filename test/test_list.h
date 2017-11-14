@@ -36,6 +36,7 @@ START_TEST(test_list_push)
         list_push(rat_list, &add_data);
         fail_unless(! list_is_empty(rat_list) , "list push failed");
         fail_unless ( *(int *) list_begin(rat_list) == data, "list push failed"  );
+        fail_unless ( *(int *) list_next(list_begin(rat_list)) == add_data, "list push failed"  );
         fail_unless (list_length(rat_list) == 2 , "list push failed");
         list_delete(rat_list);
     }
@@ -47,14 +48,21 @@ START_TEST(test_list_remove)
 
         list_t * rat_list = list_new(sizeof (int));
         int data = 4;
-        list_remove(&data);
-
         list_push(rat_list, &data);
         int add_data = 5;
         list_push(rat_list, &add_data);
-                fail_unless(! list_is_empty(rat_list) , "list push failed");
-                fail_unless ( *(int *) list_begin(rat_list) == data, "list push failed"  );
-                fail_unless (list_length(rat_list) == 2 , "list push failed");
+
+
+        fail_unless(list_length(rat_list) == 2 , "list remove has failed");
+
+        list_remove(list_next(list_begin(rat_list)));
+
+        fail_unless (list_length(rat_list) == 1 ,"list remove has failed");
+
+        list_remove(list_begin(rat_list));
+
+        fail_unless (list_is_empty(rat_list), "list push failed");
+
         list_delete(rat_list);
     }
 END_TEST

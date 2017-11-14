@@ -29,6 +29,7 @@ TCase *vector_test_19;
 TCase *vector_test_20;
 TCase *vector_test_21;
 TCase *vector_test_22;
+TCase *vector_test_23;
 
 TCase *vector_test_50;
 
@@ -99,6 +100,26 @@ START_TEST(test_vec_memset)
         vec_free(rat_vec);
     }
 END_TEST
+
+START_TEST(test_vec_updatesort)
+    {
+        vec_t * rat_vec = vec_new(sizeof (int), 3);
+        int *source_data = malloc(3 * sizeof(int));
+        *source_data = 1;
+        *(source_data + 1) = 2;
+        *(source_data + 2) = 3;
+        vec_set(rat_vec, 0, 3, source_data);
+        fail_unless(vec_updatesort(rat_vec, compare_ints), "vector update sort has failed");
+        *source_data = 4;
+        vec_set(rat_vec, 0, 3, source_data);
+        fail_unless(!vec_updatesort(rat_vec, compare_ints), "vector update sort has failed");
+
+        free(source_data);
+        vec_free(rat_vec);
+    }
+END_TEST
+
+
 
 START_TEST(test_vec_cpy_deep)
     {
@@ -470,10 +491,12 @@ START_TEST(test_vec_bisearch)
         int (*compare_ints_ptr)(const void*,const void*) = &compare_ints;
         int (*equal_ints_ptr)(const void*,const void*) = &equal_ints;
         int needle = 4;
-        int *search_results = (int *) vec_bsearch(rat_vec_src, &needle, compare_ints_ptr, equal_ints_ptr);
-        bool success_condition = *search_results == 4 ;
-                fail_unless(success_condition, "vector bi search has failed");
 
+        int *search_results = (int *) vec_bsearch(rat_vec_src, &needle, compare_ints_ptr, equal_ints_ptr);
+
+        printf("\n search result = %d \n", * search_results);
+        bool success_condition = *search_results == 4 ;
+        fail_unless(success_condition, "vector bi search has failed");
         free(source_data);
         vec_free(rat_vec_src);
     }
@@ -500,7 +523,14 @@ bool pred(void *capture, void *it)
 }
 
 int compare_ints(const void *lhs ,const void *rhs){
-    return *(int *) lhs >= *(int *)rhs ;
+
+    if (*(int *)lhs == *(int *)rhs)
+    {
+        return 0;
+    }else if (*(int *) lhs > *(int *)rhs){
+        return 1;
+    }
+    return -1;
 }
 
 int equal_ints(const void *lhs ,const void *rhs){
@@ -554,6 +584,8 @@ void init_vec_test()
     tcase_add_test(vector_test_21, test_vec_sort);
     vector_test_22 = tcase_create("test vector bi search");
     tcase_add_test(vector_test_22, test_vec_bisearch);
+    vector_test_23 = tcase_create("test vector update sort");
+    tcase_add_test(vector_test_23, test_vec_updatesort);
 
 
     vector_test_50 = tcase_create("test vector memset");
@@ -581,6 +613,7 @@ void init_vec_test()
     suite_add_tcase(vector_tsuit, vector_test_20);
     suite_add_tcase(vector_tsuit, vector_test_21);
     suite_add_tcase(vector_tsuit, vector_test_22);
+    suite_add_tcase(vector_tsuit, vector_test_23);
     suite_add_tcase(vector_tsuit, vector_test_50);
 }
 

@@ -19,15 +19,13 @@ TCase *gs_hash_test_8;
 TCase *gs_hash_test_9;
 
 
-int compare_ints(const void *lhs ,const void *rhs);
+int compare_ints2(const void *lhs ,const void *rhs);
 
 START_TEST(test_gs_hash_new)
 {
-    gs_hash_t m_gs_hash;
-    gs_hash_t *gs_pointer = &gs_hash_t;
-    gs_hash_t *gs_double_pointer = &gs_pointer;
-    gs_comp_func_t key_comp = &compare_ints;
-    gs_hash_create(gs_double_pointer,10, key_comp);
+    gs_hash_t *gs_pointer;
+    gs_hash_create(&gs_pointer, 10, compare_ints2);
+    gs_hash_dispose(gs_pointer);
 }
 END_TEST
 
@@ -65,7 +63,7 @@ END_TEST
 //END_TEST
 //
 
-int compare_ints(const void *lhs ,const void *rhs)
+int compare_ints2(const void *lhs ,const void *rhs)
 {
     return *(int *) lhs >= *(int *)rhs ;
 }
