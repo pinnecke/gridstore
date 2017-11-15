@@ -11,34 +11,38 @@
 // You should have received a copy of the GNU General Public License along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
+
 #include <check.h>
 #include <schema.h>
 #include "test_vector.h"
 #include "test_list.h"
-#include "testhashset.h"
+//#include "testhashset.h"
 #include "test_utils.h"
 #include "test_schema.h"
 #include "test_attr.h"
 #include "test_gshash.h"
+#include "test_freelist.h"
 
 int main(void)
 {
     apr_initialize();
     init_vec_test();
     init_list_test();
-    init_hashset_test();
+//    init_hashset_test();
     init_utils_test();
     init_schema_test();
     init_attr_test();
-    //  init_freelist_test();
+    init_gs_hash_test();
+    init_freelist_test();
     init_gs_hash_test();
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
-    srunner_add_suite(sr,hashset_tsuit);
-   // srunner_add_suite(sr,gs_hash_tsuit);
+//    srunner_add_suite(sr,hashset_tsuit);
+    srunner_add_suite(sr,gs_hash_tsuit);
     srunner_add_suite(sr,utils_tsuit);
     srunner_add_suite(sr,schema_tsuit);
     srunner_add_suite(sr,attr_tsuit);
+    srunner_add_suite(sr,freelist_tsuit);
 
     int nf;
 

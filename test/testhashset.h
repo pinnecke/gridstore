@@ -28,35 +28,13 @@ END_TEST
 
 
 
-//
-//START_TEST(test_hashset_push)
-//    {
-//
-//    }
-//END_TEST
-
-
-//START_TEST(test_hashset_remove)
-//    {
-//
-//
-//    }
-//END_TEST
-//
-
 void init_hashset_test()
 {
     hashset_tsuit = suite_create("hashset Test Suit");
 
     hashset_test_1 = tcase_create("test hashset creation");
     tcase_add_test(hashset_test_1, test_hashset_create);
-//    hashset_test_2 = tcase_create("test hashset push");
-//    tcase_add_test(hashset_test_2, test_hashset_push);
-//    hashset_test_3 = tcase_create("test hashset remove");
-//    tcase_add_test(hashset_test_3, test_hashset_remove);
 
     suite_add_tcase(hashset_tsuit, hashset_test_1);
-//    suite_add_tcase(hashset_tsuit, hashset_test_2);
-//    suite_add_tcase(hashset_tsuit, hashset_test_3);
 }
 
