@@ -83,6 +83,7 @@ void init_freelist_test()
     tcase_add_test(freelist_test_1, test_freelist_bind);
     freelist_test_2 = tcase_create("test freelist push");
     tcase_add_test(freelist_test_2, test_freelist_pushback);
+
     suite_add_tcase(freelist_tsuit, freelist_test_1);
     suite_add_tcase(freelist_tsuit, freelist_test_2);
 }

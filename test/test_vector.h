@@ -15,7 +15,7 @@
 
 #include <check.h>
 #include <containers/vec.h>
-
+#include "utilities.h"
 Suite *vector_tsuit;
 TCase *vector_test_1;
 TCase *vector_test_2;
@@ -41,8 +41,6 @@ TCase *vector_test_22;
 TCase *vector_test_23;
 TCase *vector_test_24;
 
-int compare_ints (const void *lhs ,const void *rhs);
-int equal_ints (const void *lhs ,const void *rhs);
 bool check_bigger_than_something(void *something, void *begin, void *end);
 bool pred (void *capture, void *it);
 bool for_each_check_bigger_capture(void *capture, void *begin, void *end);
@@ -467,7 +465,6 @@ START_TEST(test_vec_bisearch)
         int *search_results = (int *) vec_bsearch(rat_vec_src, &needle,
                                                   compare_ints, compare_ints);
 
-        printf("\n search result = %d \n", * search_results);
         bool success_condition = *search_results == 4 ;
         fail_unless(success_condition, "vector bi search has failed");
         free(source_data);
@@ -495,20 +492,7 @@ bool pred(void *capture, void *it)
     return( *(int *)capture > *(int *)it);
 }
 
-int compare_ints(const void *lhs ,const void *rhs){
 
-    if (*(int *)lhs == *(int *)rhs)
-    {
-        return 0;
-    }else if (*(int *) lhs > *(int *)rhs){
-        return 1;
-    }
-    return -1;
-}
-
-int equal_ints(const void *lhs ,const void *rhs){
-    return *(int *) lhs == *(int *)rhs ;
-}
 void init_vec_test()
 {
     vector_tsuit = suite_create("Vector Test Suit");

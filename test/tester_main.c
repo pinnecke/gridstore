@@ -11,10 +11,11 @@
 // You should have received a copy of the GNU General Public License along with this program.
 // If not, see <http://www.gnu.org/licenses/>.
 
-
 #include <check.h>
 #include <schema.h>
 #include "test_vector.h"
+#include "utilities.h"
+
 #include "test_list.h"
 //#include "testhashset.h"
 #include "test_utils.h"
@@ -28,7 +29,7 @@ int main(void)
     apr_initialize();
     init_vec_test();
     init_list_test();
-//    init_hashset_test();
+//    init_hashset_test();  >> not implemented yet as of 16/11/2017
     init_utils_test();
     init_schema_test();
     init_attr_test();
@@ -37,7 +38,7 @@ int main(void)
     init_gs_hash_test();
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
-//    srunner_add_suite(sr,hashset_tsuit);
+//    srunner_add_suite(sr,hashset_tsuit); >> not implemented yet as of 16/11/2017
     srunner_add_suite(sr,gs_hash_tsuit);
     srunner_add_suite(sr,utils_tsuit);
     srunner_add_suite(sr,schema_tsuit);
