@@ -91,6 +91,27 @@ START_TEST(test_gs_hash_set_get)
 END_TEST
 
 
+START_TEST(test_gs_hash_set_get_ex)
+    {
+        gs_hash_t *gs_hash;
+        gs_hash_create(&gs_hash, 10, compare_ints);
+        int *keys = malloc(4 * sizeof(int));
+        int *vals = malloc(4 * sizeof(int));
+        keys[0] = 0; keys[1] = 1; keys[2] = 2; keys[3] = 3;
+        vals[0] = 8; vals[1] = 1; vals[2] = 2; vals[3] = 3;
+
+        gs_hash_set_ex(gs_hash, keys, sizeof(int), vals, 4,compare_ints);
+
+                fail_unless(vals[0] != *(int *) gs_hash_get(gs_hash, keys + sizeof(int) , sizeof(int)),
+                            "couldn't retrive the correct value");
+
+        free(keys);
+        free(vals);
+//        gs_hash_dispose(gs_hash);
+    }
+END_TEST
+
+
 
 START_TEST(test_gs_hash_set_get_hash_code_identity_size_t)
     {
@@ -172,6 +193,7 @@ START_TEST(test_gs_hash_set_get_hash_code_xor)
 //        gs_hash_dispose(gs_hash); >> causes signal 6 abort
     }
 END_TEST
+
 
 
 START_TEST(test_gs_hash_set_get_hash_code_rot)
@@ -471,25 +493,6 @@ END_TEST
 //END_TEST
 
 
-//
-//
-//START_TEST(test_gs_hash_remove)
-//    {
-//
-//        gs_hash_t * rat_gs_hash = gs_hash_new(sizeof (int));
-//        int data = 4;
-//        gs_hash_remove(&data);
-//
-//        gs_hash_push(rat_gs_hash, &data);
-//        int add_data = 5;
-//        gs_hash_push(rat_gs_hash, &add_data);
-//                fail_unless(! gs_hash_is_empty(rat_gs_hash) , "gs_hash push failed");
-//                fail_unless ( *(int *) gs_hash_begin(rat_gs_hash) == data, "gs_hash push failed"  );
-//                fail_unless (gs_hash_length(rat_gs_hash) == 2 , "gs_hash push failed");
-//        gs_hash_delete(rat_gs_hash);
-//    }
-//END_TEST
-//
 
 int compare_chars(const void *lhs ,const void *rhs){
     return strcmp(lhs, rhs);
@@ -543,6 +546,10 @@ void init_gs_hash_test()
                                            "     ");
     tcase_add_test(gs_hash_test_14, test_gs_hash_set_get_hash_code_elf);
 
+    gs_hash_test_15 = tcase_create("test gs_hash get ex\n"
+                                           "     ");
+    tcase_add_test(gs_hash_test_15, test_gs_hash_set_get_ex);
+
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_1);
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_2);
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_3);
@@ -557,5 +564,6 @@ void init_gs_hash_test()
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_12);
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_13);
     suite_add_tcase(gs_hash_tsuit, gs_hash_test_14);
+    suite_add_tcase(gs_hash_tsuit, gs_hash_test_15);
 }
 
