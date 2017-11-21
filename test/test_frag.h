@@ -35,7 +35,7 @@ TCase *frag_test_9;
 TCase *frag_test_10;
 TCase *frag_test_11;
 TCase *frag_test_12;
-TCase *frag_test_13;
+
 
 START_TEST(test_frag_new_vsm)
 {
@@ -200,7 +200,7 @@ START_TEST(test_frag_num_of_tuplets_nsm)
         frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_NSM_VM);
         tuplet_t out;
         frag_insert(&out, rat_frag, 6);
-                fail_unless(frag_num_of_tuplets(rat_frag) == 6, "returned wrong number of tuplets");
+        fail_unless(frag_num_of_tuplets(rat_frag) == 6, "returned wrong number of tuplets");
         frag_delete(rat_frag);
         schema_delete(rat_schema);
     }
@@ -214,8 +214,8 @@ START_TEST(test_frag_schema_nsm)
         attr_create("age", ftype, sizeof(int32_t), rat_schema);
         attr_create("salary", ftype, sizeof(int32_t), rat_schema);
         frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_NSM_VM);
-
-                fail_unless(frag_schema(rat_frag)->attr->num_elements == rat_schema->attr->num_elements, "wrong returned value of frag schema");
+        fail_unless(frag_schema(rat_frag)->attr->num_elements == rat_schema->attr->num_elements, "wrong returned value of"
+                " frag schema");
 
         frag_delete(rat_frag);
         schema_delete(rat_schema);
@@ -231,9 +231,8 @@ START_TEST(test_frag_field_type_nsm)
         attr_create("salary", ftype, sizeof(int32_t), rat_schema);
         frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_NSM_VM);
         const attr_id_t* attributes_id = schema_attributes(rat_schema);
-
-                fail_unless(frag_field_type(rat_frag, *attributes_id) == FT_UINT32, "wrong returned value of "
-                "the type of the attribute");
+        fail_unless(frag_field_type(rat_frag, *attributes_id) == FT_UINT32, "wrong returned value of "
+        "the type of the attribute");
 
         frag_delete(rat_frag);
         schema_delete(rat_schema);

@@ -24,6 +24,7 @@
 #include "test_gshash.h"
 #include "test_freelist.h"
 #include "test_frag.h"
+#include  "test_tuplet.h"
 
 int main(void)
 {
@@ -38,15 +39,17 @@ int main(void)
     init_freelist_test();
     init_gs_hash_test();
     init_frag_test();
+    init_tuplet_test();
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
 //    srunner_add_suite(sr,hashset_tsuit); >> not implemented yet as of 16/11/2017
-    srunner_add_suite(sr,gs_hash_tsuit);
-    srunner_add_suite(sr,utils_tsuit);
-    srunner_add_suite(sr,schema_tsuit);
-    srunner_add_suite(sr,attr_tsuit);
-    srunner_add_suite(sr,freelist_tsuit);
-    srunner_add_suite(sr,frag_tsuit);
+    srunner_add_suite(sr, gs_hash_tsuit);
+    srunner_add_suite(sr, utils_tsuit);
+    srunner_add_suite(sr, schema_tsuit);
+    srunner_add_suite(sr, attr_tsuit);
+    srunner_add_suite(sr, freelist_tsuit);
+    srunner_add_suite(sr, frag_tsuit);
+    srunner_add_suite(sr, tuplet_tsuit);
     int nf;
 
     srunner_run_all(sr, CK_ENV);

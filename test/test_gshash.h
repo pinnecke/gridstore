@@ -33,8 +33,6 @@ TCase *gs_hash_test_12;
 TCase *gs_hash_test_13;
 TCase *gs_hash_test_14;
 TCase *gs_hash_test_15;
-TCase *gs_hash_test_16;
-TCase *gs_hash_test_17;
 
 int compare_chars(const void *lhs ,const void *rhs);
 
