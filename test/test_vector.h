@@ -16,6 +16,7 @@
 #include <check.h>
 #include <containers/vec.h>
 #include "utilities.h"
+
 Suite *vector_tsuit;
 TCase *vector_test_1;
 TCase *vector_test_2;
@@ -53,6 +54,7 @@ START_TEST(test_vec_creation)
 }
 END_TEST
 
+
 START_TEST(test_vec_resize)
     {
         vec_t * rat_vec = vec_new(sizeof (int),20);
@@ -81,7 +83,6 @@ START_TEST(test_vec_reserve)
 END_TEST
 
 
-
 START_TEST(test_vec_length)
     {
         vec_t * rat_vec = vec_new(sizeof (int),20);
@@ -90,6 +91,7 @@ START_TEST(test_vec_length)
         vec_free(rat_vec);
     }
 END_TEST
+
 
 START_TEST(test_vec_memset)
     {
@@ -106,6 +108,7 @@ START_TEST(test_vec_memset)
         vec_free(rat_vec);
     }
 END_TEST
+
 
 START_TEST(test_vec_updatesort)
     {
@@ -124,7 +127,6 @@ START_TEST(test_vec_updatesort)
         vec_free(rat_vec);
     }
 END_TEST
-
 
 
 START_TEST(test_vec_cpy_deep)
@@ -184,6 +186,7 @@ START_TEST(test_vec_cpy_shallow)
     }
 END_TEST
 
+
 START_TEST(test_vec_at)
     {
         vec_t * rat_vec = vec_new(sizeof (int),3);
@@ -202,6 +205,7 @@ START_TEST(test_vec_at)
     }
 END_TEST
 
+
 START_TEST(test_vec_peek)
     {
         vec_t * rat_vec = vec_new(sizeof (int),3);
@@ -216,6 +220,7 @@ START_TEST(test_vec_peek)
     }
 END_TEST
 
+
 START_TEST(test_vec_begin)
     {
         vec_t * rat_vec = vec_new(sizeof (int),3);
@@ -229,6 +234,7 @@ START_TEST(test_vec_begin)
         vec_free(rat_vec);
     }
 END_TEST
+
 
 START_TEST(test_vec_end)
     {
@@ -384,7 +390,6 @@ START_TEST(test_vec_count)
 END_TEST
 
 
-
 START_TEST(test_vec_contains)
     {
         vec_t *rat_vec_src = vec_new(sizeof (int), 2);
@@ -430,6 +435,7 @@ START_TEST(test_vec_foreach)
         vec_free(rat_vec_src);
     }
 END_TEST
+
 
 START_TEST(test_vec_sort)
     {
@@ -486,6 +492,7 @@ bool for_each_check_bigger_capture(void *capture, void *begin, void *end)
         }
     return true;
 }
+
 
 bool pred(void *capture, void *it)
 {

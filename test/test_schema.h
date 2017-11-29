@@ -29,6 +29,7 @@ TCase *schema_test_6;
 TCase *schema_test_7;
 TCase *schema_test_8;
 
+
 START_TEST(test_schema_new)
 {
     schema_t *rat_schema = schema_new("test_table");

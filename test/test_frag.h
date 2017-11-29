@@ -269,8 +269,6 @@ void init_frag_test()
     frag_test_12 = tcase_create("test frag the types of schema attributes");
     tcase_add_test(frag_test_12, test_frag_field_type_nsm);
 
-
-
     suite_add_tcase(frag_tsuit, frag_test_1);
     suite_add_tcase(frag_tsuit, frag_test_2);
     suite_add_tcase(frag_tsuit, frag_test_3);
@@ -283,6 +281,5 @@ void init_frag_test()
     suite_add_tcase(frag_tsuit, frag_test_10);
     suite_add_tcase(frag_tsuit, frag_test_11);
     suite_add_tcase(frag_tsuit, frag_test_12);
-
 }
 

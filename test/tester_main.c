@@ -15,7 +15,6 @@
 #include <schema.h>
 #include "test_vector.h"
 #include "utilities.h"
-
 #include "test_list.h"
 //#include "testhashset.h"
 #include "test_utils.h"
@@ -24,11 +23,14 @@
 #include "test_gshash.h"
 #include "test_freelist.h"
 #include "test_frag.h"
-#include  "test_tuplet.h"
+#include "test_tuplet.h"
+#include "test_tuplet_field.h"
+
 
 int main(void)
 {
     apr_initialize();
+
     init_vec_test();
     init_list_test();
 //    init_hashset_test();  >> not implemented yet as of 16/11/2017
@@ -40,6 +42,8 @@ int main(void)
     init_gs_hash_test();
     init_frag_test();
     init_tuplet_test();
+    init_tuplet_field_test();
+
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
 //    srunner_add_suite(sr,hashset_tsuit); >> not implemented yet as of 16/11/2017
@@ -50,34 +54,36 @@ int main(void)
     srunner_add_suite(sr, freelist_tsuit);
     srunner_add_suite(sr, frag_tsuit);
     srunner_add_suite(sr, tuplet_tsuit);
-    int nf;
+    srunner_add_suite(sr, tuplet_field_tsuit);
 
+    int nf;
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);
     srunner_free(sr);
+
     apr_terminate();
+
     return nf == 0 ? 0 : 1;
 }
 
-//
+//////
 //int main(void){
+//
 //    apr_initialize();
+//
 //    schema_t *rat_schema = schema_new("test_table");
 //    enum field_type ftype = FT_UINT32;
 //    attr_create("age", ftype, sizeof(int32_t), rat_schema);
 //    attr_create("salary", ftype, sizeof(int32_t), rat_schema);
-//    attr_create("length", ftype, sizeof(int32_t), rat_schema);
-//    attr_create("Id", ftype, sizeof(int32_t), rat_schema);
-//    const attr_id_t* attributes_id = schema_attributes(rat_schema);
-//    attr_id_t* projected_attributes_id = malloc( sizeof(attributes_id) * 3 );
-//    *projected_attributes_id = *attributes_id;
-//    *(projected_attributes_id + 1) = *attributes_id + 2;
-//    *(projected_attributes_id + 2) = *attributes_id + 3;
-//    printf("\nthe number of elements with in the schema = %d \n",(int) rat_schema->attr->num_elements) ;
-//    schema_t *rat_subschema = schema_subset(rat_schema, projected_attributes_id, 3);
-//    printf("\n %s \n",schema_attr_by_id(rat_subschema, 1)->name);
-//    free((attr_id_t*)projected_attributes_id);
+//    frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_DSM_VM);
+//    tuplet_t out;
+//    frag_insert(&out, rat_frag, 6);
+//    tuplet_t rat_tuplet;
+//    tuplet_open(&rat_tuplet, rat_frag, 0);
+//    tuplet_size_by_schema(rat_tuplet.fragment->schema);
+//    frag_delete(rat_frag);
 //    schema_delete(rat_schema);
 //    apr_terminate();
+//
 //    return 0;
 //}

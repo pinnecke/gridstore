@@ -491,10 +491,10 @@ END_TEST
 //END_TEST
 
 
-
 int compare_chars(const void *lhs ,const void *rhs){
     return strcmp(lhs, rhs);
 }
+
 
 void init_gs_hash_test()
 {

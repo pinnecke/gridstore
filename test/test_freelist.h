@@ -70,10 +70,12 @@ void init_int(void *data)
         *(int *)data = 0;
 }
 
+
 void inc_int(void *data)
 {
     *(int *)data += 1;
 }
+
 
 void init_freelist_test()
 {

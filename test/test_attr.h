@@ -68,7 +68,6 @@ START_TEST(test_attr_total_size)
 END_TEST
 
 
-
 START_TEST(test_attr_cpy)
     {
         schema_t *rat_schema = schema_new("test_table");

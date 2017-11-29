@@ -29,7 +29,6 @@ START_TEST(test_utils_basic)
 END_TEST
 
 
-
 void init_utils_test()
 {
     utils_tsuit = suite_create("utils Test Suit");

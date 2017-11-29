@@ -22,16 +22,9 @@ TCase *tuplet_test_1;
 TCase *tuplet_test_2;
 TCase *tuplet_test_3;
 TCase *tuplet_test_4;
-TCase *tuplet_test_5;
-TCase *tuplet_test_6;
-TCase *tuplet_test_7;
-TCase *tuplet_test_8;
-TCase *tuplet_test_9;
-TCase *tuplet_test_10;
-TCase *tuplet_test_11;
-TCase *tuplet_test_12;
-TCase *tuplet_test_13;
 
+
+bool next_tuplet(struct tuplet_t *);
 
 
 START_TEST(test_tuplet_field_type)
@@ -79,8 +72,7 @@ START_TEST(test_tuplet_next)
 END_TEST
 
 
-
-START_TEST(test_tuplet_set_null)
+START_TEST(test_tuplet_size)
     {
         schema_t *rat_schema = schema_new("test_table");
         enum field_type ftype = FT_UINT32;
@@ -91,13 +83,33 @@ START_TEST(test_tuplet_set_null)
         frag_insert(&out, rat_frag, 6);
         tuplet_t rat_tuplet;
         tuplet_open(&rat_tuplet, rat_frag, 0);
-        fail_unless(tuplet_size(&rat_tuplet) == sizeof(int32_t) , "tuplet_size has failed");
+
+        fail_unless(tuplet_size(&rat_tuplet) == (sizeof(int32_t) * 2 * 4), "tuplet_size has failed");
         frag_delete(rat_frag);
         schema_delete(rat_schema);
     }
 END_TEST
 
 
+START_TEST(test_size_by_schema)
+    {
+        schema_t *rat_schema = schema_new("test_table");
+        enum field_type ftype = FT_UINT32;
+        attr_create("age", ftype, sizeof(int32_t), rat_schema);
+        attr_create("salary", ftype, sizeof(int32_t), rat_schema);
+        frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_DSM_VM);
+        tuplet_t out;
+        frag_insert(&out, rat_frag, 6);
+        tuplet_t rat_tuplet;
+        tuplet_open(&rat_tuplet, rat_frag, 0);
+        fail_unless(tuplet_size(&rat_tuplet) == tuplet_size_by_schema(rat_tuplet.fragment->schema), "tuplet schema"
+                "size has failed");
+        frag_delete(rat_frag);
+        schema_delete(rat_schema);
+    }
+END_TEST
+
+// tuplet set null isn't yet implemented
 //START_TEST(test_tuplet_set_null)
 //    {
 //        schema_t *rat_schema = schema_new("test_table");
@@ -118,8 +130,11 @@ END_TEST
 //    }
 //END_TEST
 
+bool next_tuplet(struct tuplet_t * tuplet)
+{
 
-
+    return true;
+}
 
 void init_tuplet_test()
 {
@@ -129,10 +144,13 @@ void init_tuplet_test()
     tcase_add_test(tuplet_test_1, test_tuplet_field_type) ;
     tuplet_test_2 = tcase_create("test tuplet next");
     tcase_add_test(tuplet_test_2, test_tuplet_next) ;
-    tuplet_test_3 = tcase_create("test tuplet set null");
-    tcase_add_test(tuplet_test_3, test_tuplet_set_null) ;
+    tuplet_test_3 = tcase_create("test tuplet size");
+    tcase_add_test(tuplet_test_3, test_tuplet_size) ;
+    tuplet_test_4 = tcase_create("test tuplet size by schema");
+    tcase_add_test(tuplet_test_4, test_size_by_schema) ;
 
     suite_add_tcase(tuplet_tsuit, tuplet_test_1);
     suite_add_tcase(tuplet_tsuit, tuplet_test_2);
     suite_add_tcase(tuplet_tsuit, tuplet_test_3);
+    suite_add_tcase(tuplet_tsuit, tuplet_test_4);
 }
