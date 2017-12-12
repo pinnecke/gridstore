@@ -35,6 +35,7 @@ TCase *event_test_6;
 TCase *event_test_7;
 TCase *event_test_8;
 TCase *event_test_9;
+TCase *event_test_10;
 
 
 START_TEST(test_event_creation)
@@ -65,7 +66,6 @@ START_TEST(test_event_heartbeat_new)
         fail_unless(rat_event, "couldn't create a heart beat event");
         fail_unless(gs_event_get_signal(rat_event) == GS_SIG_HEARTBEAT,
                     "couldn't create a heart beat event");
-
     }
 END_TEST
 
@@ -137,6 +137,20 @@ START_TEST(test_event_gridstore_invoke)
 END_TEST
 
 
+START_TEST(test_event_system_exit)
+    {
+        gs_dispatcher_t *dispatcher;
+        gs_dispatcher_create(&dispatcher);
+        gs_shell_t *shell;
+        gs_shell_create(&shell, dispatcher);
+        gs_event_t *rat_event = gs_event_system_exit(dispatcher, GS_OBJECT_TYPE_SHELL, shell);
+                fail_unless(rat_event, "couldn't get a gridstore invoke");
+                fail_unless(gs_event_get_signal(rat_event) == GS_SIG_SYSEXIT,
+                            "got the wrong signal with gridstore invoke");
+    }
+END_TEST
+
+
 void init_event_test()
 {
     event_tsuit = suite_create("event Test Suit");
@@ -159,6 +173,9 @@ void init_event_test()
     tcase_add_test(event_test_8, test_event_gridstore_test);
     event_test_9 = tcase_create("test event gridstore invoke");
     tcase_add_test(event_test_9, test_event_gridstore_invoke);
+    event_test_10 = tcase_create("test event system exit");
+    tcase_add_test(event_test_10, test_event_system_exit);
+
 
     suite_add_tcase(event_tsuit, event_test_1);
     suite_add_tcase(event_tsuit, event_test_2);
@@ -169,5 +186,6 @@ void init_event_test()
     suite_add_tcase(event_tsuit, event_test_7);
     suite_add_tcase(event_tsuit, event_test_8);
     suite_add_tcase(event_tsuit, event_test_9);
+    suite_add_tcase(event_tsuit, event_test_10);
 }
 
