@@ -102,7 +102,7 @@ void trace_print(FILE *file);
 #define GS_DEBUG(msg, args...)                                                                                         \
     {                                                                                                                  \
        /* fprintf(stderr, "# DEBUG: ");        */                                                                          \
-     /*   fprintf(stderr, msg, args);              */                                                                      \
+       /* fprintf(stderr, msg, args);          */                                                                                    \
        /* fprintf(stderr, "\n");                     */                                                                    \
     }
 

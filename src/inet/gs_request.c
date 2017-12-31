@@ -21,7 +21,7 @@ typedef struct gs_request_t {
     gs_request_body_e body_type;
 } gs_request_t;
 
- void parse_request(gs_request_t *request, int socket_desc);
+void parse_request(gs_request_t *request, int socket_desc);
 
 GS_DECLARE(gs_status_t) gs_request_create(gs_request_t **request, int socket_desc)
 {
@@ -121,7 +121,7 @@ GS_DECLARE(gs_status_t) gs_request_is_valid(const gs_request_t *request)
     return (request->is_valid);
 }
 
- void parse_request(gs_request_t *request, int socket_desc)
+void parse_request(gs_request_t *request, int socket_desc)
 {
     char message_buffer[10240];
 
@@ -195,22 +195,22 @@ GS_DECLARE(gs_status_t) gs_request_is_valid(const gs_request_t *request)
     // in case the request requires an additional response to proceed, send this response
     const char *expect = apr_table_get(request->fields, "Expect");
     if (request->is_valid && expect && strlen(expect)) {
-        int response_code_expected_at = strcspn(expect, "-");
-        if (response_code_expected_at > 0 &&
-            !strcmp(apr_pstrndup(request->pool, expect, response_code_expected_at), "100")) {
-
-            // send 100 continue
-            response_t response;
-            response_create(&response);
-            response_end(&response, HTTP_STATUS_CODE_100_CONTINUE);
-            char *response_text = response_pack(&response);
-            write(socket_desc, response_text, strlen(response_text));
-            free (response_text);
+//        int response_code_expected_at = strcspn(expect, "-");
+//        if (response_code_expected_at > 0 &&
+//            !strcmp(apr_pstrndup(request->pool, expect, response_code_expected_at), "100")) {
+//
+//             send 100 continue
+//            response_t response;
+//            response_create(&response);
+//            response_end(&response, HTTP_STATUS_CODE_100_CONTINUE);
+//            char *response_text = response_pack(&response);
+//            write(socket_desc, response_text, strlen(response_text));
+//            free (response_text);
 
             // read response, and set current line pointer to that content
             recv(socket_desc, message_buffer, sizeof(message_buffer), 0);
             line = apr_strtok(apr_pstrdup(request->pool, message_buffer), "\r\n", &last_line );
-        }
+//        }
     }
 
     // in case the request contains form-data resp. is multipart, read the subsequent data
@@ -236,30 +236,30 @@ GS_DECLARE(gs_status_t) gs_request_is_valid(const gs_request_t *request)
     // parse body part
     switch (request->body_type) {
         case GS_MULTIPART: {
-                bool read_name = true;
-                while(line != NULL) {
-                    if (!strstr(line, request->boundary)) {
-                        char *attribute_name, *attribute_value;
-                        if (read_name) {
-                            if (strstr(line, "form-data; name=")) {
-                                // read form name
-                                int name_starts_at = strcspn(line, "\"") + 1;
-                                int name_end_at = strcspn(line + name_starts_at, "\"");
-                                if (name_end_at < strlen(line)) {
-                                    attribute_name = apr_pstrndup(request->pool, line + name_starts_at, name_end_at);
-                                    read_name = false;
-                                }
+            bool read_name = true;
+            while(line != NULL) {
+                if (!strstr(line, request->boundary)) {
+                    char *attribute_name, *attribute_value;
+                    if (read_name) {
+                        if (strstr(line, "form-data; name=")) {
+                            // read form name
+                            int name_starts_at = strcspn(line, "\"") + 1;
+                            int name_end_at = strcspn(line + name_starts_at, "\"");
+                            if (name_end_at < strlen(line)) {
+                                attribute_name = apr_pstrndup(request->pool, line + name_starts_at, name_end_at);
+                                read_name = false;
                             }
-                        } else {
-                            // read form data
-                            attribute_value = apr_pstrdup(request->pool, line);
-                            read_name = true;
                         }
-                        apr_table_add(request->form_data, attribute_name, attribute_value);
+                    } else {
+                        // read form data
+                        attribute_value = apr_pstrdup(request->pool, line);
+                        read_name = true;
                     }
-                    line = apr_strtok( NULL, "\r\n",  &last_line);
+                    apr_table_add(request->form_data, attribute_name, attribute_value);
                 }
-            } break;
+                line = apr_strtok( NULL, "\r\n",  &last_line);
+            }
+        } break;
         default:
             request->is_valid = false;
             warn("Unknown body type for request: '%s'", request->original);

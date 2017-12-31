@@ -25,8 +25,10 @@
 #include "test_frag.h"
 #include "test_tuplet.h"
 #include "test_tuplet_field.h"
-
-
+#include "test_tuple.h"
+#include "test_dispatcher.h"
+#include "test_event.h"
+#include "test_gs_request.h"
 int main(void)
 {
     apr_initialize();
@@ -43,18 +45,26 @@ int main(void)
     init_frag_test();
     init_tuplet_test();
     init_tuplet_field_test();
+    init_tuple_test();
+//    init_dispatcher_test();
+    init_event_test();
+    init_gs_request_test();
 
     SRunner *sr = srunner_create(list_tsuit);
     srunner_add_suite(sr,vector_tsuit);
 //    srunner_add_suite(sr,hashset_tsuit); >> not implemented yet as of 16/11/2017
-    srunner_add_suite(sr, gs_hash_tsuit);
-    srunner_add_suite(sr, utils_tsuit);
-    srunner_add_suite(sr, schema_tsuit);
-    srunner_add_suite(sr, attr_tsuit);
-    srunner_add_suite(sr, freelist_tsuit);
-    srunner_add_suite(sr, frag_tsuit);
-    srunner_add_suite(sr, tuplet_tsuit);
-    srunner_add_suite(sr, tuplet_field_tsuit);
+//    srunner_add_suite(sr, gs_hash_tsuit);
+//    srunner_add_suite(sr, utils_tsuit);
+//    srunner_add_suite(sr, schema_tsuit);
+//    srunner_add_suite(sr, attr_tsuit);
+//    srunner_add_suite(sr, freelist_tsuit);
+//    srunner_add_suite(sr, frag_tsuit);
+//    srunner_add_suite(sr, tuplet_tsuit);
+//    srunner_add_suite(sr, tuplet_field_tsuit);
+//    srunner_add_suite(sr, tuple_tsuit);
+//    srunner_add_suite(sr, dispatcher_tsuit);
+//    srunner_add_suite(sr, event_tsuit);
+    srunner_add_suite(sr, gs_request_tsuit);
 
     int nf;
     srunner_run_all(sr, CK_ENV);
@@ -65,24 +75,28 @@ int main(void)
 
     return nf == 0 ? 0 : 1;
 }
-
-//////
+//
+////////
 //int main(void){
 //
 //    apr_initialize();
 //
-//    schema_t *rat_schema = schema_new("test_table");
-//    enum field_type ftype = FT_UINT32;
-//    attr_create("age", ftype, sizeof(int32_t), rat_schema);
-//    attr_create("salary", ftype, sizeof(int32_t), rat_schema);
-//    frag_t *rat_frag = frag_new(rat_schema, 10,  FIT_HOST_DSM_VM);
-//    tuplet_t out;
-//    frag_insert(&out, rat_frag, 6);
-//    tuplet_t rat_tuplet;
-//    tuplet_open(&rat_tuplet, rat_frag, 0);
-//    tuplet_size_by_schema(rat_tuplet.fragment->schema);
-//    frag_delete(rat_frag);
-//    schema_delete(rat_schema);
+//    schema_t *schema = schema_new("My Grid Table");
+//    attr_create_uint64("A", schema); // attribute id 0
+//    attr_create_uint32("B", schema); // attribute id 1
+//    attr_create_uint16("C", schema); // attribute id 2
+//    attr_create_uint16("D", schema); // attribute id 3
+//
+//    table_t *table = table_new(schema, 16);
+//    printf("\n \n hi I'm here \n \n");
+//
+//    tuple_t rat_tuple;
+//    tuple_open(&rat_tuple, table, 0);
+//            fail_unless(rat_tuple.table == table, "tuple open has failed");
+////        fail_unless(rat_tuple.table == table, "tuple open has failed");
+//    table_delete(table);
+//    schema_delete(schema);
+//
 //    apr_terminate();
 //
 //    return 0;
