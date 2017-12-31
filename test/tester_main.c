@@ -29,6 +29,9 @@
 #include "test_dispatcher.h"
 #include "test_event.h"
 #include "test_gs_request.h"
+#include "test_gs_response.h"
+
+
 int main(void)
 {
     apr_initialize();
@@ -48,10 +51,11 @@ int main(void)
     init_tuple_test();
 //    init_dispatcher_test();
     init_event_test();
-    init_gs_request_test();
+//    init_gs_request_test();
+    init_gs_response_test();
 
     SRunner *sr = srunner_create(list_tsuit);
-    srunner_add_suite(sr,vector_tsuit);
+//    srunner_add_suite(sr,vector_tsuit);
 //    srunner_add_suite(sr,hashset_tsuit); >> not implemented yet as of 16/11/2017
 //    srunner_add_suite(sr, gs_hash_tsuit);
 //    srunner_add_suite(sr, utils_tsuit);
@@ -64,8 +68,8 @@ int main(void)
 //    srunner_add_suite(sr, tuple_tsuit);
 //    srunner_add_suite(sr, dispatcher_tsuit);
 //    srunner_add_suite(sr, event_tsuit);
-    srunner_add_suite(sr, gs_request_tsuit);
-
+//    srunner_add_suite(sr, gs_request_tsuit);
+    srunner_add_suite(sr, gs_response_tsuit);
     int nf;
     srunner_run_all(sr, CK_ENV);
     nf = srunner_ntests_failed(sr);
@@ -77,25 +81,17 @@ int main(void)
 }
 //
 ////////
-//int main(void){
+//int main(void) {
 //
 //    apr_initialize();
 //
-//    schema_t *schema = schema_new("My Grid Table");
-//    attr_create_uint64("A", schema); // attribute id 0
-//    attr_create_uint32("B", schema); // attribute id 1
-//    attr_create_uint16("C", schema); // attribute id 2
-//    attr_create_uint16("D", schema); // attribute id 3
+//    response_t response;
+//    response_t *resp_pointer = &response;
+//    response_create(resp_pointer);
 //
-//    table_t *table = table_new(schema, 16);
-//    printf("\n \n hi I'm here \n \n");
-//
-//    tuple_t rat_tuple;
-//    tuple_open(&rat_tuple, table, 0);
-//            fail_unless(rat_tuple.table == table, "tuple open has failed");
-////        fail_unless(rat_tuple.table == table, "tuple open has failed");
-//    table_delete(table);
-//    schema_delete(schema);
+//    response_field_set(resp_pointer, "Content-Length", "40");
+//    response_field_get(resp_pointer, "Content-Length");
+//    puts( response_field_get(resp_pointer, "Content-Length"));
 //
 //    apr_terminate();
 //

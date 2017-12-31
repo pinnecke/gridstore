@@ -154,7 +154,7 @@ START_TEST(test_gs_request_has_form)
 
         fail_unless(gs_request_create(&request, desc) == GS_SUCCESS,
                             "couldn't create a request");
-
+        char key[] ="param1";
         fail_unless( gs_request_has_form(request, key)
         , "the request has form has failed");
         gs_request_dispose(&request);
