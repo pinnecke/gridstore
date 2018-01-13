@@ -198,6 +198,7 @@ IF (PROJECT_OS_LINUX)
             check_pic
             bsd
             m
+            curl
             ${APR_LIBRARIES}
             ${APRUTIL_LIBRARIES}
             ${OPENSSL_LIBRARIES}

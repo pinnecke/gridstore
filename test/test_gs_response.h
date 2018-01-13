@@ -38,6 +38,7 @@ START_TEST(test_gs_response_create)
     response_create(&response);
     fail_unless(true,
     "couldn't create a response");
+    response_dispose(&response);
 }
 END_TEST
 
@@ -52,37 +53,38 @@ START_TEST(test_gs_response_set)
         response_field_set(&response, key, val);
         fail_unless(true,
                     "couldn't set a field response");
+        response_dispose(&response);
     }
 END_TEST
 
 START_TEST(test_gs_response_get)
     {
         response_t response;
-        response_t *resp_pointer = &response;
-        response_create(resp_pointer);
+        response_create(&response);
                 fail_unless(true,
                             "couldn't create a response");
 
-        response_field_set(resp_pointer, "Content-Length", "40");
+        response_field_set(&response, "Content-Length", "40");
         fail_unless(true,
                         "couldn't set a field response");
-        const char *field_Val = response_field_get(resp_pointer, "Content-Length");
+        const char *field_Val = response_field_get(&response, "Content-Length");
         fail_unless(!strncmp(field_Val,"40",2),
                     "response field get has failed");
+        response_dispose(&response);
     }
 END_TEST
 
 START_TEST(test_gs_response_body_set_get)
     {
         response_t response;
-        response_t *resp_pointer = &response;
-        response_create(resp_pointer);
+        response_create(&response);
         fail_unless(true,
                    "couldn't create a response");
         char body[] ="blablalbla";
-        response_body_set(resp_pointer, body);
-        fail_unless(!strcmp(body, response_body_get(resp_pointer)),
+        response_body_set(&response, body);
+        fail_unless(!strcmp(body, response_body_get(&response)),
         "body set and get has failed");
+        response_dispose(&response);
     }
 END_TEST
 
@@ -90,13 +92,13 @@ START_TEST(test_gs_response_type_set_get)
     {
         response_t response;
         response_create(&response);
-                fail_unless(true,
-                            "couldn't create a response");
+        fail_unless(true,
+                        "couldn't create a response");
         response_content_type_set(&response, MIME_CONTENT_TYPE_TEXT_PLAIN);
         response_end(&response, HTTP_STATUS_CODE_400_BAD_REQUEST);
-        puts(response_content_type_get(&response));
         fail_unless(! strcmp(MIME_CONTENT_TYPE_TEXT_PLAIN, response_body_get(&response)),
                             "body set and get has failed");
+        response_dispose(&response);
     }
 END_TEST
 
@@ -109,6 +111,7 @@ START_TEST(test_gs_response_end)
         response_end(&response,HTTP_STATUS_CODE_100_CONTINUE);
         fail_unless(true,
                             "couldn't modify the response end a response");
+        response_dispose(&response);
     }
 END_TEST
 
@@ -122,6 +125,7 @@ START_TEST(test_gs_response_format_fields)
         const char *formated_field = response_format_fields(&response);
         fail_unless(! strcmp(formated_field, "Content-Type: text/plain"),
         "string format field has failed");
+        response_dispose(&response);
     }
 END_TEST
 
@@ -135,6 +139,7 @@ START_TEST(test_gs_response_pack)
         const char *res_pack = response_pack(&response);
         fail_unless(res_pack != NULL,
         "failed to retrieve the response pack");
+        response_dispose(&response);
     }
 END_TEST
 

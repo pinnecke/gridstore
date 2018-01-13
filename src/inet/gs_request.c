@@ -128,7 +128,8 @@ void parse_request(gs_request_t *request, int socket_desc)
     // Read the request from the client socket
     recv(socket_desc, message_buffer, sizeof(message_buffer), 0);
     request->original = apr_pstrdup(request->pool, message_buffer);
-
+    puts(message_buffer);
+    puts("#####################3");
     // Parse line by line
     char *last_line;
     char *line = apr_strtok(apr_pstrdup(request->pool, message_buffer), "\r\n", &last_line );
@@ -195,22 +196,23 @@ void parse_request(gs_request_t *request, int socket_desc)
     // in case the request requires an additional response to proceed, send this response
     const char *expect = apr_table_get(request->fields, "Expect");
     if (request->is_valid && expect && strlen(expect)) {
-//        int response_code_expected_at = strcspn(expect, "-");
-//        if (response_code_expected_at > 0 &&
-//            !strcmp(apr_pstrndup(request->pool, expect, response_code_expected_at), "100")) {
-//
+        int response_code_expected_at = strcspn(expect, "-");
+        if (response_code_expected_at > 0 &&
+            !strcmp(apr_pstrndup(request->pool, expect, response_code_expected_at), "100")) {
+
 //             send 100 continue
-//            response_t response;
-//            response_create(&response);
-//            response_end(&response, HTTP_STATUS_CODE_100_CONTINUE);
-//            char *response_text = response_pack(&response);
-//            write(socket_desc, response_text, strlen(response_text));
-//            free (response_text);
+            response_t response;
+            response_create(&response);
+            response_end(&response, HTTP_STATUS_CODE_100_CONTINUE);
+            char *response_text = response_pack(&response);
+            write(socket_desc, response_text, strlen(response_text));
+            free (response_text);
 
             // read response, and set current line pointer to that content
             recv(socket_desc, message_buffer, sizeof(message_buffer), 0);
+            puts(message_buffer);
             line = apr_strtok(apr_pstrdup(request->pool, message_buffer), "\r\n", &last_line );
-//        }
+        }
     }
 
     // in case the request contains form-data resp. is multipart, read the subsequent data
@@ -265,4 +267,7 @@ void parse_request(gs_request_t *request, int socket_desc)
             warn("Unknown body type for request: '%s'", request->original);
             break;
     }
+    char *response_text ="hello world \n\n";
+    write(socket_desc, response_text, strlen(response_text));
+
 }
